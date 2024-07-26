@@ -7,43 +7,48 @@
 
 #include "hittable.h"
 
-class sphere: public hittable {
+class sphere : public hittable {
 public:
-    sphere(const point3& center, double radius) : center(center), radius(fmax(0,radius)) {}
+  sphere(const point3 &center, double radius)
+      : center(center), radius(fmax(0, radius)) {
+    // TODO: initialize material pointer
+  }
 
-    bool hit(const ray& r, interval ray_t, hit_record& rec) const override {
-        vec3 oc = center - r.origin();
-        auto a = r.direction().length_squared();
-        auto h = dot(r.direction(), oc);
-        auto c = oc.length_squared() - radius * radius;
+  bool hit(const ray &r, interval ray_t, hit_record &rec) const override {
+    vec3 oc = center - r.origin();
+    auto a = r.direction().length_squared();
+    auto h = dot(r.direction(), oc);
+    auto c = oc.length_squared() - radius * radius;
 
-        auto discriminant = h * h - a * c;
+    auto discriminant = h * h - a * c;
 
-        if (discriminant < 0)
-            return false;
+    if (discriminant < 0)
+      return false;
 
-        auto sqrtd = sqrt(discriminant);
+    auto sqrtd = sqrt(discriminant);
 
-        auto root = (h-sqrtd)/a;
-        if (!ray_t.surrounds(root)) {
-            root = (h + sqrtd) / a;
-            if (!ray_t.surrounds(root))
-                return false;
-        }
-
-        rec.t = root;
-        rec.p = r.at(rec.t);
-        rec.normal = (rec.p - center)/radius;
-
-        vec3 outward_normal = (rec.p - center) / radius;
-        rec.set_face_normal(r, outward_normal);
-
-        return true;
+    auto root = (h - sqrtd) / a;
+    if (!ray_t.surrounds(root)) {
+      root = (h + sqrtd) / a;
+      if (!ray_t.surrounds(root))
+        return false;
     }
 
+    rec.t = root;
+    rec.p = r.at(rec.t);
+    rec.normal = (rec.p - center) / radius;
+
+    vec3 outward_normal = (rec.p - center) / radius;
+    rec.set_face_normal(r, outward_normal);
+    rec.mat = mat;
+
+    return true;
+  }
+
 private:
-    point3 center;
-    double radius;
+  point3 center;
+  double radius;
+  shared_ptr<material> mat;
 };
 
-#endif//RAYTRACER_SPHERE_H
+#endif // RAYTRACER_SPHERE_H
