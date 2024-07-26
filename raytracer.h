@@ -11,6 +11,7 @@
 #include <limits>
 #include <memory>
 
+using std::fabs;
 using std::make_shared;
 using std::shared_ptr;
 using std::sqrt;
