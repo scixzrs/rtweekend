@@ -1,3 +1,0 @@
-/home/yashu/projects/rtweekend/build/CMakeFiles/RayTracer.dir
-/home/yashu/projects/rtweekend/build/CMakeFiles/edit_cache.dir
-/home/yashu/projects/rtweekend/build/CMakeFiles/rebuild_cache.dir
